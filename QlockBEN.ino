@@ -79,7 +79,7 @@ Spezial Qlock BEN edition
  * Die Status-LEDs koennen hier durch auskommentieren ausgeschaltet werden.
  * Default: eingeschaltet 
  */
-//#define ENABLE_DCF_LED
+#define ENABLE_DCF_LED
 #define ENABLE_SQW_LED
 
 /*
@@ -101,7 +101,7 @@ Spezial Qlock BEN edition
  * multiplexer nicht kreuzen moechte oder es vergessen hat.
  * Default: ausgeschaltet
  */
-#define UPSIDE_DOWN
+//#define UPSIDE_DOWN
 
 /*
  * Dieser Schalter stellt die Anzeige auf den Kopf und teilt das Display, falls man die 
@@ -228,8 +228,8 @@ int lastMode = mode;
 
 //Anpassungen RV
 //Hochzeitstag
-byte HTag = 10;
-byte HMonat = 9;
+byte HTag = 23;
+byte HMonat = 11;
 byte heartnr = 1;
 //LoveHeart
 unsigned long prevmillisH = 0;
