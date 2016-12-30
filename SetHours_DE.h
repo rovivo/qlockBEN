@@ -80,6 +80,8 @@ void setHours(int hours, boolean glatt) {
   case 11:
   case 23:
     H_ELF;
+    H_ELF2;
+    //H_ELF3;
     break;
   }
 }
