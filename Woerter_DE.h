@@ -41,7 +41,7 @@
 //another eleven because of a fault in the laser plate
 //#define H_ELF        matrix[4] |= 0b0000011100000000
 
-//#define H_ELF         matrix[8] |= 0b0000000011100000 // result : ölf
+#define H_ELF         matrix[8] |= 0b0000000011100000 // result : ölf
 
 //#define H_ELF         matrix[8] |= 0b0010000001100000 // result : e...lf
 
@@ -49,8 +49,8 @@
 //#define H_ELF2        matrix[7] |= 0b0000001000000000 // result : l
 //#define H_ELF3        matrix[8] |= 0b0000000000100000 // result : f
 
-#define H_ELF         matrix[7] |= 0b0000001000000000 // result : l
-#define H_ELF2        matrix[8] |= 0b0010000000100000 // result : e...f
+//#define H_ELF         matrix[7] |= 0b0000001000000000 // result : l
+//#define H_ELF2        matrix[8] |= 0b0010000000100000 // result : e...f
 
 #define H_ZWOELF     matrix[8] |= 0b0000001111100000
 
