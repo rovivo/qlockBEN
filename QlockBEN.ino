@@ -233,7 +233,7 @@ int lastMode = mode;
  */
 
 //Hochzeitstag
-byte HTag = 23;
+byte HTag = 29;
 byte HMonat = 11;
 byte heartnr = 1; //LoveHeart
 int intervallH = 2500;
