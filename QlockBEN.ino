@@ -368,6 +368,11 @@ void setup() {
   Serial.print(ds1307.getMinutes());
   Serial.print(":");
   Serial.println(ds1307.getSeconds());
+  Serial.print(ds1307.getDate());
+  Serial.print(".");
+  Serial.print(ds1307.getMonth());
+  Serial.print(".");
+  Serial.println(ds1307.getYear());
   Serial.flush();
 #endif
 

@@ -1,5 +1,5 @@
 /**
- * MyDCF77.cpp
+ * MyDCF77.h
  * Klasse fuer die Auswertung des DCF77-Zeitsignals.
  * Diese Klasse geht von einem 'sauberen' Signal aus.
  * Bei schlechten Empfangsbedingungen muesste man eine
@@ -7,14 +7,17 @@
  *
  * @mc       Arduino/RBBB
  * @autor    Christian Aschoff / caschoff _AT_ mac _DOT_ com
- * @version  1.2
+ * @version  1.5
  * @created  1.11.2011
- * @updated  6.7.2012
+ * @updated  18.1.2013
  *
  * Versionshistorie:
  * V 1.1:   - Fehler in der Array-Laenge und in toString() behoben.
  * V 1.1.1: - signal() public gemacht.
  * V 1.2:   - Signal geglaettet.
+ * V 1.3:   - Strings in PROGMEM ausgelagert.
+ * V 1.4:   - Signal kann invertiert werden (fuer manche Empfaenger noetig) - danke an Dominik.
+ * V 1.5:   - Optimierung hinsichtlich Speicherbedarf.
  */
 #include "MyDCF77.h"
 
@@ -23,13 +26,13 @@
 /**
  * Initialisierung mit dem Pin, an dem das Signal des Empfaengers anliegt
  */
-MyDCF77::MyDCF77(int signalPin) {
+MyDCF77::MyDCF77(byte signalPin) {
   _signalPin = signalPin;
 #ifndef MyDCF77_SIGNAL_IS_ANALOG
   pinMode(_signalPin, INPUT);
 #endif
 
-  for(int i=0; i<MYDCF77_TELEGRAMMLAENGE; i++) {
+  for(byte i=0; i<MYDCF77_TELEGRAMMLAENGE; i++) {
     _bits[i] = 0;
   }
   _bitsPointer = 0;
@@ -48,7 +51,11 @@ boolean MyDCF77::signal() {
 #ifdef MyDCF77_SIGNAL_IS_ANALOG
   val = analogRead(_signalPin) > MyDCF77_ANALOG_SIGNAL_TRESHOLD;
 #else
-  val = digitalRead(_signalPin) == HIGH;
+  #ifdef MYDCF77_SIGNAL_IS_INVERTED
+    val = digitalRead(_signalPin) == LOW;
+  #else
+    val = digitalRead(_signalPin) == HIGH;
+  #endif
 #endif
   _meanvalues[_meanpointer] = val;
   _meanpointer++;
@@ -56,7 +63,7 @@ boolean MyDCF77::signal() {
     _meanpointer = 0;
   }
   int count = 0;
-  for(int i=0; i<MYDCF77_DCF_MEAN_COUNT; i++) {
+  for(byte i=0; i<MYDCF77_DCF_MEAN_COUNT; i++) {
     if(_meanvalues[i]) {
       count++;
     }
@@ -126,9 +133,9 @@ boolean MyDCF77::poll() {
   if(millis()-_signalStoppedAtMillis > MYDCF77_SYNC_PAUSE_TRESHOLD) {
 #ifdef DEBUG
     Serial.println();
-    Serial.print("Duration (pause): ");
+    Serial.print(F("Duration (pause): "));
     Serial.println(millis()-_signalStoppedAtMillis);
-    Serial.print("Bitcount: ");
+    Serial.print(F("Bitcount: "));
     Serial.println(_bitsPointer);
     Serial.flush();
 #endif
@@ -138,7 +145,7 @@ boolean MyDCF77::poll() {
     }
 
     // Bitarray und Pointer zuruecksetzen...
-    for(int i=0; i<MYDCF77_TELEGRAMMLAENGE; i++) {
+    for(byte i=0; i<MYDCF77_TELEGRAMMLAENGE; i++) {
       _bits[i] = 0;
     }
     _bitsPointer = 0;
@@ -146,13 +153,13 @@ boolean MyDCF77::poll() {
     _signalStartedAtMillis = millis();
     _signalStoppedAtMillis = millis();
     
-#ifdef BIGDEBUG
+#ifdef DEBUG
     // Von oben nach unten lesen. Zuerst Bitnummer, dann Bedeutung.
-    Serial.println("          1111111111222222222233333333334444444444555555555");
-    Serial.println("01234567890123456789012345678901234567890123456789012345678");
-    Serial.println("---------------RAZZASMMMMMMMPSSSSSSPDDDDDDWWWMMMMMYYYYYYYYP");
-    Serial.println("                1122 12481241124812212481212412481124812483");
-    Serial.println("                         000     00     00       0    0000 ");
+    Serial.println(F("          1111111111222222222233333333334444444444555555555"));
+    Serial.println(F("01234567890123456789012345678901234567890123456789012345678"));
+    Serial.println(F("---------------RAZZASMMMMMMMPSSSSSSPDDDDDDWWWMMMMMYYYYYYYYP"));
+    Serial.println(F("                1122 12481241124812212481212412481124812483"));
+    Serial.println(F("                         000     00     00       0    0000 "));
     Serial.flush();
 #endif    
   }
@@ -168,14 +175,14 @@ boolean MyDCF77::decode() {
   boolean ok = true;
 
 #ifdef DEBUG
-  Serial.println("Decoding telegram...");
+  Serial.println(F("Decoding telegram..."));
   Serial.flush();
 #endif
 
   if(_bits[20] != 1) {
     ok = false;
 #ifdef DEBUG
-    Serial.println("Check-bit S failed.");
+    Serial.println(F("Check-bit S failed."));
     Serial.flush();
 #endif
   }
@@ -183,7 +190,7 @@ boolean MyDCF77::decode() {
   if(_bits[17] == _bits[18]) {
     ok = false;
 #ifdef DEBUG
-    Serial.println("Check Z1 != Z2 failed.");
+    Serial.println(F("Check Z1 != Z2 failed."));
     Serial.flush();
 #endif
   }
@@ -222,14 +229,14 @@ boolean MyDCF77::decode() {
     _minutes += _bits[27] * 40;
   }
 #ifdef DEBUG
-  Serial.print("Minutes: ");
+  Serial.print(F("Minutes: "));
   Serial.println(_minutes);
   Serial.flush();
 #endif
   if((c + _bits[28]) % 2 != 0) {
     ok = false;
 #ifdef DEBUG
-    Serial.println("Check-bit P1: minutes failed.");
+    Serial.println(F("Check-bit P1: minutes failed."));
     Serial.flush();
 #endif
   }
@@ -264,14 +271,14 @@ boolean MyDCF77::decode() {
     _hours += _bits[34] * 20;
   }
 #ifdef DEBUG
-  Serial.print("Hours: ");
+  Serial.print(F("Hours: "));
   Serial.println(_hours);
   Serial.flush();
 #endif
   if((c + _bits[35]) % 2 != 0) {
     ok = false;
 #ifdef DEBUG
-    Serial.println("Check-bit P2: hours failed.");
+    Serial.println(F("Check-bit P2: hours failed."));
     Serial.flush();
 #endif
   }
@@ -306,7 +313,7 @@ boolean MyDCF77::decode() {
     _date += _bits[41] * 20;
   }
 #ifdef DEBUG
-  Serial.print("Date: ");
+  Serial.print(F("Date: "));
   Serial.println(_date);
   Serial.flush();
 #endif
@@ -328,7 +335,7 @@ boolean MyDCF77::decode() {
     _dayOfWeek += _bits[44] * 4;
   }
 #ifdef DEBUG
-  Serial.print("Day of week: ");
+  Serial.print(F("Day of week: "));
   Serial.println(_dayOfWeek);
   Serial.flush();
 #endif
@@ -358,7 +365,7 @@ boolean MyDCF77::decode() {
     _month += _bits[49] * 10;
   }
 #ifdef DEBUG
-  Serial.print("Month: ");
+  Serial.print(F("Month: "));
   Serial.println(_month);
   Serial.flush();
 #endif
@@ -399,18 +406,18 @@ boolean MyDCF77::decode() {
     c++;
     _year += _bits[57] * 80;
   }
-  _year += 2000;
-/*
-  if (_year < 2012) {
-    ok = false;
+
+  
+           
+         
 #ifdef DEBUG
-    Serial.print("Check year >= 2012 failed.");
-    Serial.flush();
-#endif
-  }
-*/  
-#ifdef DEBUG
-  Serial.print("Year: ");
+                         
+           
+    
+   
+  
+      
+  Serial.print(F("Year: "));
   Serial.println(_year);
   Serial.flush();
 #endif
@@ -418,7 +425,7 @@ boolean MyDCF77::decode() {
   if((c + _bits[58]) % 2 != 0) {
     ok = false;
 #ifdef DEBUG
-    Serial.println("Check-bit P3: date failed.");
+    Serial.println(F("Check-bit P3: date failed."));
     Serial.flush();
 #endif
   }
@@ -489,27 +496,28 @@ char* MyDCF77::asString() {
 //
 // Getter
 //
-int MyDCF77::getMinutes() {
+byte MyDCF77::getMinutes() {
   return _minutes;
 }
 
-int MyDCF77::getHours() {
+byte MyDCF77::getHours() {
   return _hours;
 }
 
-int MyDCF77::getDate() {
+byte MyDCF77::getDate() {
   return _date;
 }
 
-int MyDCF77::getDayOfWeek() {
+byte MyDCF77::getDayOfWeek() {
   return _dayOfWeek;
 }
 
-int MyDCF77::getMonth() {
+byte MyDCF77::getMonth() {
   return _month;
 }
 
-int MyDCF77::getYear() {
+byte MyDCF77::getYear() {
   return _year;
 }
+
 

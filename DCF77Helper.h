@@ -29,7 +29,7 @@
 #include "TimeStamp.h"
 
 // Wieviele Samples muessen stimmen, damit das DCF77-Telegramm als gueltig zaehlt?
-#define DCF77HELPER_MAX_SAMPLES 4
+#define DCF77HELPER_MAX_SAMPLES 3
 
 class DCF77Helper {
 public:
