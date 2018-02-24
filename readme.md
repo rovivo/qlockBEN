@@ -1,3 +1,1 @@
 # WordClock
-
-### made my ZeroLord
