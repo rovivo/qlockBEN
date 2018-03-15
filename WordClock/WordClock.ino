@@ -15,9 +15,9 @@
 #define PIN_RTC_C			3	// SCL
 #define PIN_RTC_ON			4
 
-#define PIN_BTN_UP			9
+#define PIN_BTN_UP			7
 #define PIN_BTN_MODE		8
-#define PIN_BTN_DOWN		7
+#define PIN_BTN_DOWN		9
 
 #define PIN_NEOPIXEL		10
 #define PIXELS_MAX			114
@@ -27,16 +27,24 @@
 #define	MODE_CLOCK			0
 #define MODE_DCFDIAG		1
 #define MODE_TEMP			2
+#define MODE_ADDHOUR		3
+#define MODE_ADDMIN			4
+#define MODE_ADDWDAY		5
+#define MODE_ADDDAY			6
+#define MODE_ADDMON			7
+#define MODE_ADDYEAR		8
 
-#define MODE_INUBIA			3
-#define MODE_SCHWEIZ		4
-#define MODE_AUSTRIA		5
-#define MODE_DAILY			6
-#define MODE_NINA			7
-#define MODE_URS			8
 
-#define	MODE_SLEEP			21
-#define	MODE_WAKEUP			22
+
+#define MODE_INUBIA			10
+#define MODE_SCHWEIZ		11
+#define MODE_AUSTRIA		12
+#define MODE_DAILY			13
+#define MODE_NINA			14
+#define MODE_URS			15
+
+#define	MODE_SLEEP			20
+#define	MODE_WAKEUP			21
 
 
 Adafruit_NeoPixel	neo		= Adafruit_NeoPixel(PIXELS_MAX,  PIN_NEOPIXEL,  NEO_GRB + NEO_KHZ800);
@@ -126,20 +134,128 @@ void loop(){
 		clk.resetRtc();
 		inp.call();	// clears click-functions
 	}
-	if(inp.clickUp() or inp.clickDown()){
-		state = MODE_TEMP;
-	}
+	
 	
 	if(inp.clickMode()){
 		state++;
 		tmrToclock.ton(false);
-		if(state > 2)
+		if(state > 8)
 			state = 0;
-		Serial.print("Mode-Change to: ");
-		Serial.println(state);
+		//Serial.print("Mode-Change to: ");
+		//Serial.println(state);
 	}
 	
 	switch(state){
+		case MODE_ADDHOUR:{
+			if(inp.clickUp())
+				clk.addHour();
+			if(inp.clickDown())
+				clk.addHour(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcHour();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'H', 5, 6);
+			writeMatrix(&matrix, 'R', 5, 2);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		case MODE_ADDMIN:{
+			if(inp.clickUp())
+				clk.addMinute();
+			if(inp.clickDown())
+				clk.addMinute(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcMinute();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'M', 5, 6);
+			writeMatrix(&matrix, 'N', 5, 0);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		case MODE_ADDWDAY:{
+			if(inp.clickUp())
+				clk.addWday();
+			if(inp.clickDown())
+				clk.addWday(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcWday();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'W', 5, 4);
+			writeMatrix(&matrix, 'D', 5, 0);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		case MODE_ADDDAY:{
+			if(inp.clickUp())
+				clk.addDay();
+			if(inp.clickDown())
+				clk.addDay(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcDay();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'D', 5, 6);
+			writeMatrix(&matrix, 'D', 5, 2);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		case MODE_ADDMON:{
+			if(inp.clickUp())
+				clk.addMonth();
+			if(inp.clickDown())
+				clk.addMonth(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcMonth();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'M', 5, 4);
+			writeMatrix(&matrix, 'T', 5, 0);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		case MODE_ADDYEAR:{
+			if(inp.clickUp())
+				clk.addYear();
+			if(inp.clickDown())
+				clk.addYear(true);
+			const RGB	colorParamHeader = { 0, 0,50};
+			const RGB 	colorParamValue  = {0,150,50};
+			int temp = (int)clk.getRtcYear();
+			clearMatrix(&matrix);
+			writeMatrix(&matrix, 'Y', 5, 7);
+			writeMatrix(&matrix, 'Y', 5, 3);
+			writeNeo(&matrix, &neo, &colorParamHeader, true);
+			clearMatrix(&matrix);
+			writeMatrix(&matrix,   temp/10, 0, 6);
+			writeMatrix(&matrix,   temp%10, 0, 2);
+			writeNeo(&matrix, &neo, &colorParamValue);
+			break;
+		}
+		
+		
 		case MODE_SLEEP:
 		case MODE_WAKEUP:{
 			const RGB colorOff = {0,0,0};
@@ -290,6 +406,7 @@ void loop(){
 			writeNeo(&matrix, &neo, &col6);
 			break;
 		}
+		
 		case MODE_TEMP:{
 			if(tmrToclock.ton(true,2000)){
 				tmrToclock.ton(false);
@@ -317,6 +434,9 @@ void loop(){
 			break;
 		}
 		case MODE_CLOCK:{
+			if(inp.clickUp() or inp.clickDown()){
+				state = MODE_TEMP;
+			}
 			generateClockMatrix(&matrix, Hour, Minute);
 			writeNeo(&matrix, &neo, &seq.actualColor, true);
 			break;

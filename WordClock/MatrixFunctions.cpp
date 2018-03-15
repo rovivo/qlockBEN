@@ -200,7 +200,7 @@ void writeMatrix(PATTERN* in, char C, unsigned short row, unsigned short shiftLe
 			sign[4] = 0b111;
 			break;}
 		case 'M':{
-			sign[0] = 0b10101;
+			sign[0] = 0b10001;
 			sign[1] = 0b11011;
 			sign[2] = 0b10101;
 			sign[3] = 0b10001;

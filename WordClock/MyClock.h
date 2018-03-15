@@ -42,12 +42,13 @@ class MyClock
 		float			getRtcTemp();
 		void			resetRtc();
 		
-		void  			setHour(byte val);
-		void  			setMinute(byte val);
-		void  			setSecond(byte val);
-		void  			setDay(byte val);
-		void  			setMonth(byte val);
-		void  			setYear(byte val);
+		void			adjustRTCClock();
+		void  			addHour(bool inv=false);
+		void  			addMinute(bool inv=false);
+		void  			addDay(bool inv=false);
+		void  			addWday(bool inv=false);
+		void  			addMonth(bool inv=false);
+		void  			addYear(bool inv=false);
 		
 		
 	private:

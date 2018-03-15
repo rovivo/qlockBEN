@@ -600,3 +600,75 @@ void MyClock::resetRtc(){
 	initRTC = true;
 }
 
+void MyClock::adjustRTCClock(){
+	Wire.beginTransmission(0x68);
+	Wire.write(0);
+	Wire.write(1);// Seconds always to 01s
+	Wire.write(hex2bcd(rtcMinute));
+	Wire.write(hex2bcd(rtcHour));
+	Wire.write(hex2bcd(rtcWday));
+	Wire.write(hex2bcd(rtcDay));
+	Wire.write(hex2bcd(rtcMonth));
+	Wire.write(hex2bcd(rtcYear));
+	Wire.endTransmission();
+}
+void MyClock::addHour(bool inv){
+	if(!inv and rtcHour < 23){
+		rtcHour++;
+		adjustRTCClock();
+	}
+	if(inv and rtcHour > 0){
+		rtcHour--;
+		adjustRTCClock();
+	}
+}
+void MyClock::addMinute(bool inv){
+	if(!inv and rtcMinute < 59){
+		rtcMinute++;
+		adjustRTCClock();
+	}
+	if(inv and rtcMinute > 0){
+		rtcMinute--;
+		adjustRTCClock();
+	}
+}
+void MyClock::addDay(bool inv){
+	if(!inv and rtcDay < 31){
+		rtcDay++;
+		adjustRTCClock();
+	}
+	if(inv and rtcDay > 1){
+		rtcDay--;
+		adjustRTCClock();
+	}
+}
+void MyClock::addWday(bool inv){
+	if(!inv and rtcWday < 7){
+		rtcWday++;
+		adjustRTCClock();
+	}
+	if(inv and rtcWday > 1){
+		rtcWday--;
+		adjustRTCClock();
+	}
+}
+void MyClock::addMonth(bool inv){
+	if(!inv and rtcMonth < 12){
+		rtcMonth++;
+		adjustRTCClock();
+	}
+	if(inv and rtcMonth > 1){
+		rtcMonth--;
+		adjustRTCClock();
+	}
+}
+void MyClock::addYear(bool inv){
+	if(!inv and rtcYear < 40){
+		rtcYear++;
+		adjustRTCClock();
+	}
+	if(inv and rtcYear > 0){
+		rtcYear--;
+		adjustRTCClock();
+	}
+}
