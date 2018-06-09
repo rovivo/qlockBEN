@@ -195,8 +195,48 @@ void loop(){
 			writeMatrix(&matrix, 'D', 5, 0);
 			writeNeo(&matrix, &neo, &colorParamHeader, true);
 			clearMatrix(&matrix);
-			writeMatrix(&matrix,   temp/10, 0, 6);
-			writeMatrix(&matrix,   temp%10, 0, 2);
+			switch(temp){
+				case 1:{
+					writeMatrix(&matrix,   'M', 0, 6);
+					writeMatrix(&matrix,   'O', 0, 2);
+					break;
+				}
+				case 2:{
+					writeMatrix(&matrix,   'D', 0, 6);
+					writeMatrix(&matrix,   'I', 0, 2);
+					break;
+				}
+				case 3:{
+					writeMatrix(&matrix,   'M', 0, 6);
+					writeMatrix(&matrix,   'I', 0, 2);
+					break;
+				}
+				case 4:{
+					writeMatrix(&matrix,   'D', 0, 6);
+					writeMatrix(&matrix,   'O', 0, 2);
+					break;
+				}
+				case 5:{
+					writeMatrix(&matrix,   'F', 0, 6);
+					writeMatrix(&matrix,   'R', 0, 2);
+					break;
+				}
+				case 6:{
+					writeMatrix(&matrix,   'S', 0, 6);
+					writeMatrix(&matrix,   'A', 0, 2);
+					break;
+				}
+				case 7:{
+					writeMatrix(&matrix,   'S', 0, 6);
+					writeMatrix(&matrix,   'O', 0, 2);
+					break;
+				}
+				default:{
+					writeMatrix(&matrix,   temp/10, 0, 6);
+					writeMatrix(&matrix,   temp%10, 0, 2);
+					break;
+				}
+			}
 			writeNeo(&matrix, &neo, &colorParamValue);
 			break;
 		}
