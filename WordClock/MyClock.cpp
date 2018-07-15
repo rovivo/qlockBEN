@@ -329,11 +329,6 @@ void MyClock::stream_check(){
 					Serial.println(_hour);
 					return;
 				}
-				if(_hour == 12){
-					Serial.print("Skip: Hour '13' problem");
-					Serial.println(_hour);
-					return;
-				}
 				dcfHour = _hour;
 				break;
 			case 36:

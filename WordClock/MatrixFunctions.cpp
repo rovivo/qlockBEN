@@ -318,7 +318,7 @@ void printMatrix(PATTERN* matrix){
 }
 
 void generateClockMatrix(PATTERN* matrix, unsigned short h, unsigned short m) {
-	if(h > 12)
+	if(h >= 12)
 		h -= 12;
 	
 	clearMatrix(matrix);
