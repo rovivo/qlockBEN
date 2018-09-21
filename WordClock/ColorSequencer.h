@@ -8,7 +8,7 @@
 class ColorSequencer
 {
 	public:
-		ColorSequencer(unsigned long speed=1000, unsigned short maxBrightness=255, int minBrightnessSum=250);
+		ColorSequencer(unsigned long speed=1000, unsigned short maxBrightness=255, int minBrightnessSum=200);
 		void call(bool init=false);
 		void getNew();
 		RGB actualColor = {50,50,50};
