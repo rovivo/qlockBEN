@@ -26,7 +26,7 @@ void EventHandler::add(	short mode,
 	}
 	else{
 		delay(3000);
-		Serial.println("ERROR (allocation failed)");
+		Serial.println(F("ERROR (allocation failed)"));
 	}
 }
 
@@ -56,8 +56,8 @@ int EventHandler::check(unsigned short year,
 				and	(cursor->second == (short)second or second == -1)
 				and	(cursor->wday == (short)wday or cursor->wday == -1)
 			){
-				//Serial.print("Event detected: ");
-				//Serial.println(cursor->mode);
+				Serial.print(F("Event detected: "));
+				Serial.println(cursor->mode);
 				return cursor->mode;
 			}
 			cursor = cursor->next;
@@ -67,29 +67,29 @@ int EventHandler::check(unsigned short year,
 }
 
 void EventHandler::print(){
-	//Serial.println("Event-List:");
-	//cursor	= eventList;
-	//int num	= 0;
-	//while(cursor){
-	//	num++;
-	//	Serial.print(num);
-	//	Serial.print(" Act: ");
-	//	Serial.print(cursor->mode);
-	//	Serial.print(", Y:");
-	//	Serial.print(cursor->year);
-	//	Serial.print(", M:");
-	//	Serial.print(cursor->month);
-	//	Serial.print(", D:");
-	//	Serial.print(cursor->day);
-	//	Serial.print(", H:");
-	//	Serial.print(cursor->hour);
-	//	Serial.print(", I:");
-	//	Serial.print(cursor->minute);
-	//	Serial.print(", S:");
-	//	Serial.print(cursor->second);
-	//	Serial.print(", W:");
-	//	Serial.print(cursor->wday);
-	//	Serial.println();
-	//	cursor	= cursor->next;
-	//}
+	Serial.println(F("Event-List:"));
+	cursor	= eventList;
+	int num	= 0;
+	while(cursor){
+		num++;
+		Serial.print(num);
+		Serial.print(F(" Act: "));
+		Serial.print(cursor->mode);
+		Serial.print(F(", Y:"));
+		Serial.print(cursor->year);
+		Serial.print(F(", M:"));
+		Serial.print(cursor->month);
+		Serial.print(F(", D:"));
+		Serial.print(cursor->day);
+		Serial.print(F(", H:"));
+		Serial.print(cursor->hour);
+		Serial.print(F(", I:"));
+		Serial.print(cursor->minute);
+		Serial.print(F(", S:"));
+		Serial.print(cursor->second);
+		Serial.print(F(", W:"));
+		Serial.print(cursor->wday);
+		Serial.println();
+		cursor	= cursor->next;
+	}
 }

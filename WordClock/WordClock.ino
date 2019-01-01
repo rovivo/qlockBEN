@@ -8,6 +8,7 @@
 #include "MatrixFunctions.h"
 #include "ColorSequencer.h"
 #include "EventHandler.h"
+#include "FreeMemory.h"
 
 #define PIN_DCF				1
 
@@ -141,7 +142,7 @@ void loop(){
 		tmrToclock.ton(false);
 		if(state > 8)
 			state = 0;
-		//Serial.print("Mode-Change to: ");
+		//Serial.print(F("Mode-Change to: "));
 		//Serial.println(state);
 	}
 	
@@ -470,6 +471,9 @@ void loop(){
 			if(tmrDiagPrintTime.ton(true,10000)){
 				tmrDiagPrintTime.ton(false);
 				clk.printDateTime();
+				// Debug: free Memory
+				Serial.print(F("FreeMem:"));
+				Serial.println(freeMemory());
 			}
 			break;
 		}

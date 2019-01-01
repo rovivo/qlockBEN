@@ -305,12 +305,12 @@ void printMatrix(PATTERN* matrix){
 //			if(row > 0 and row < 9)
 //				cor = 1;
 //			if(cor > 0 and (col == 0 or col == 12))
-//				Serial.print(" - ");
+//				Serial.print(F(" - "));
 //			else{
 //				if( (matrix->r[row] >> (12-col-cor)) & 1 )
-//					Serial.print(" X ");
+//					Serial.print(F(" X "));
 //				else
-//					Serial.print(" . ");
+//					Serial.print(F(" . "));
 //			}
 //		}
 //		Serial.println();

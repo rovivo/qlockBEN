@@ -64,30 +64,30 @@ void MyClock::call(){
 	if(sigPos){
 		lastNeg = millis();
 		unsigned long timeFalse = lastNeg-lastPos;
-		//	Serial.print(" Sig-: ");
+		//	Serial.print(F(" Sig-: "));
 		//	Serial.println(timeFalse);
 		if(timeFalse < 450){				// Pause was too short
 			bitstream_invalid = true;
-			Serial.print(" ! Sig- too short: ");
+			Serial.print(F(" ! Sig- too short: "));
 			Serial.println(timeFalse);
 		}
 		else if(timeFalse > 800)
 			stream_end();
 		else if(timeFalse > 1600){ 		// Pause was too long
 			bitstream_invalid = true;
-			Serial.print(" ! Sig- too long: ");
+			Serial.print(F(" ! Sig- too long: "));
 			Serial.println(timeFalse);
 		}
 	}
 	if(sigNeg){
 		lastPos = millis();
 		unsigned long timeTrue = lastPos-lastNeg;
-		//	Serial.print("               Sig+: ");
+		//	Serial.print(F("               Sig+: "));
 		//	Serial.println(timeTrue);
 		if(timeTrue < 50){
 			bitstream_invalid = true;
 			stream_add(0);
-			Serial.print(" ! Sig+ too short: ");
+			Serial.print(F(" ! Sig+ too short: "));
 			Serial.println(timeTrue);
 		}
 		else if(timeTrue < 95){
@@ -96,7 +96,7 @@ void MyClock::call(){
 		else if(timeTrue < 105){
 			bitstream_invalid = true;
 			stream_add(1);
-			Serial.print(" ! Sig undef.: ");
+			Serial.print(F(" ! Sig undef.: "));
 			Serial.println(timeTrue);
 		}
 		else if(timeTrue < 150){
@@ -105,7 +105,7 @@ void MyClock::call(){
 		else{
 			bitstream_invalid = true;
 			stream_add(0);
-			Serial.print(" ! Sig+ too long: ");
+			Serial.print(F(" ! Sig+ too long: "));
 			Serial.println(timeTrue);
 		}
 	}
@@ -151,7 +151,7 @@ void MyClock::stream_end(){
 	if(!bitstream_invalid)
 		stream_check();
 	else
-		Serial.println("Stream invalid");
+		Serial.println(F("Stream invalid"));
 
 	bitstream_invalid = false;
 	bitstream_idx = 0;
@@ -177,13 +177,13 @@ void MyClock::view_stream(){
 }
 
 //void MyClock::stream_print(){
-//		Serial.println(": Stream Print :: ");
+//		Serial.println(F(": Stream Print :: "));
 //		for(int n=0; n<MYCLOCK_STREAMLEN; n++){
 //			for(int i=0; i<8; i++){
 //				if(bitstream[n] & (1 <<  i))
-//					Serial.print("1");
+//					Serial.print(F("1"));
 //				else
-//					Serial.print("0");
+//					Serial.print(F("0"));
 //			}
 //		}
 //		Serial.println();
@@ -201,7 +201,7 @@ void MyClock::stream_check(){
 	short _dateP	= false; // Parity-counter date
 	
 	if(bitstream_idx != 59){
-		Serial.println("Fail: Length");
+		Serial.println(F("Fail: Length"));
 		return;
 	}
 	
@@ -213,13 +213,13 @@ void MyClock::stream_check(){
 		switch(n){
 			case 0:
 				if(b){
-					Serial.println("Fail: First bit");
+					Serial.println(F("Fail: First bit"));
 					return;
 				}
 				break;
 			case 20:
 				if(!b){
-					Serial.println("Fail: Bit 20");
+					Serial.println(F("Fail: Bit 20"));
 					return;
 				}
 				break;
@@ -270,11 +270,11 @@ void MyClock::stream_check(){
 					_minP++;
 				}
 				if(_minP%2 == 1){
-					Serial.println("Failed: Parity min");
+					Serial.println(F("Failed: Parity min"));
 					return;
 				}
 				if(_min < 1 or _min > 59){
-					Serial.print("Fail: min ");
+					Serial.print(F("Fail: min "));
 					Serial.println(_min);
 					return;
 				}
@@ -321,11 +321,11 @@ void MyClock::stream_check(){
 					_hourP++;
 				}
 				if(_hourP%2 == 1){
-					Serial.println("Fail: Parity hour");
+					Serial.println(F("Fail: Parity hour"));
 					return;
 				}
 				if(_hour < 1 or _hour > 23){
-					Serial.print("Fail: Hour ");
+					Serial.print(F("Fail: Hour "));
 					Serial.println(_hour);
 					return;
 				}
@@ -467,19 +467,19 @@ void MyClock::stream_check(){
 				if(b){
 					_dateP++;
 					if(_hourP%2 == 1){
-							Serial.println("Fail: Parity date");
+							Serial.println(F("Fail: Parity date"));
 						return;
 					}
 					if(_day < 1 or _day > 31){
-							Serial.println("Fail: Day");
+							Serial.println(F("Fail: Day"));
 						return;
 					}
 					if(_month < 1 or _month > 12){
-							Serial.println("Fail: Month");
+							Serial.println(F("Fail: Month"));
 						return;
 					}
 					if(_year < 18 or _year > 30){
-							Serial.println("Fail: Year");
+							Serial.println(F("Fail: Year"));
 						return;
 					}
 					dcfDay		= _day;
@@ -495,15 +495,15 @@ void MyClock::stream_check(){
 		}
 	}
 	Serial.println();
-	Serial.println("DT valid ");
+	Serial.println(F("DT valid "));
 	Serial.print(dcfHour);
-	Serial.print(":");
+	Serial.print(F(":"));
 	Serial.print(dcfMinute);
-	Serial.print(" ");
+	Serial.print(F(" "));
 	Serial.print(dcfDay);
-	Serial.print(".");
+	Serial.print(F("."));
 	Serial.print(dcfMonth);
-	Serial.print(".");
+	Serial.print(F("."));
 	Serial.println(dcfYear);
 	validDCF = true;
 }
@@ -539,21 +539,21 @@ unsigned short MyClock::getDcfYear(){
 }
 
 void MyClock::printDateTime(){
-	Serial.print("DT: ");
+	Serial.print(F("DT: "));
 	Serial.print(rtcHour, DEC);
-	Serial.print(":");
+	Serial.print(F(":"));
 	Serial.print(rtcMinute, DEC);
-	Serial.print(":");
+	Serial.print(F(":"));
 	Serial.print(rtcSecond, DEC);
-	Serial.print(" ");
+	Serial.print(F(" "));
 	Serial.print(rtcDay, DEC);
-	Serial.print(".");
+	Serial.print(F("."));
 	Serial.print(rtcMonth, DEC);
-	Serial.print(".");
+	Serial.print(F("."));
 	Serial.print(rtcYear, DEC);
-	Serial.print(" (");
+	Serial.print(F(" ("));
 	Serial.print(rtcWday, DEC);
-	Serial.println(")");
+	Serial.println(F(")"));
 }
 
 unsigned short MyClock::hex2bcd(unsigned short in){
