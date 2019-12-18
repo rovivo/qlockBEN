@@ -10,16 +10,19 @@
 #include "EventHandler.h"
 #include "FreeMemory.h"
 
-#define PIN_DCF				1
+#define debug
 
-#define PIN_RTC_D			2	// SDA
-#define PIN_RTC_C			3	// SCL
+#define PIN_DCF				9
+
+#define PIN_RTC_D			A4	// SDA
+#define PIN_RTC_C			A5	// SCL
 #define PIN_RTC_ON			4
 
-#define PIN_BTN_UP			7
-#define PIN_BTN_MODE		8
-#define PIN_BTN_DOWN		9
+#define PIN_BTN_UP			5
+#define PIN_BTN_MODE		7
+#define PIN_BTN_DOWN		6
 
+#define PIN_LDR				A3
 #define PIN_NEOPIXEL		10
 #define PIXELS_MAX			114
 
@@ -71,35 +74,39 @@ void setup(){
 	///////////////////////////////////////////////////////
 	//# ADD EVENTS (-1 for all values)
 	//			MODE			Year	Month	Day		Hour 	Minute	Second		Weekday		// DD.MM.YYYY / HH:II:SS
-	event.add(	MODE_TEMP,		-1,		-1,		-1,		-1,		-1,		26,			-1		);	// ??.??.???? / ??:??:30 // Temperaturanzeige
 
-	// Montag
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 1		);	// WAKE UP FROM SLEEP
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 1		);	// GO SLEEP
-	// Dienstag
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 2		);	// WAKE UP FROM SLEEP
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 2		);	// GO SLEEP
-	// Mittwoch
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 3		);	// WAKE UP FROM SLEEP
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 3		);	// GO SLEEP
-	// Donnerstag
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 4		);	// WAKE UP FROM SLEEP
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 4		);	// GO SLEEP
-	// Freitag
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 5		);	// WAKE UP FROM SLEEP
-	// Samstag
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		 1,		 0,		 0,			 5		);	// GO SLEEP
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 8,		30,		 0,			 6		);	// WAKE UP FROM SLEEP
-	// Sonntag
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		 1,		 0,		 0,			 6		);	// GO SLEEP
-	event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 9,		 0,		 0,			 7		);	// WAKE UP FROM SLEEP
-	event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 7		);	// GO SLEEP
+	//// Montag
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 1		);	// WAKE UP FROM SLEEP
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 1		);	// GO SLEEP
+	//// Dienstag
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 2		);	// WAKE UP FROM SLEEP
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 2		);	// GO SLEEP
+	//// Mittwoch
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 3		);	// WAKE UP FROM SLEEP
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 3		);	// GO SLEEP
+	//// Donnerstag
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 4		);	// WAKE UP FROM SLEEP
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 4		);	// GO SLEEP
+	//// Freitag
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 6,		 0,		 0,			 5		);	// WAKE UP FROM SLEEP
+	//// Samstag
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		 1,		 0,		 0,			 5		);	// GO SLEEP
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 8,		30,		 0,			 6		);	// WAKE UP FROM SLEEP
+	//// Sonntag
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		 1,		 0,		 0,			 6		);	// GO SLEEP
+	//event.add(	MODE_WAKEUP,	-1,		-1,		-1,		 9,		 0,		 0,			 7		);	// WAKE UP FROM SLEEP
+	//event.add(	MODE_SLEEP,		-1,		-1,		-1,		23,		 0,		 0,			 7		);	// GO SLEEP
 	
 	event.add(	MODE_SCHWEIZ,	-1,		 8,		 1,		-1,		 0,		25,			-1		);
 	
-	event.add(	MODE_NINA,		-1,		 6,		 5,		-1,		-1,		45,			-1		);
-	event.add(	MODE_URS,		-1,		 7,		31,		-1,		-1,		45,			-1		);
+	//event.add(	MODE_NINA,		-1,		 6,		 5,		-1,		-1,		45,			-1		);
+	//event.add(	MODE_URS,		-1,		 7,		31,		-1,		-1,		45,			-1		);
 	
+	Serial.println("QlockKerstinRGB");
+    Serial.print("compiled: ");
+    Serial.print(__DATE__);
+	Serial.print(" ");
+    Serial.println(__TIME__);
 	
 	
 }
@@ -124,6 +131,21 @@ void loop(){
 	unsigned short Day		= clk.getRtcDay();
 	unsigned short Wday		= clk.getRtcWday();
 	
+	#ifdef debug
+		Serial.print("Time from RTC: ");
+		Serial.print(Hour);
+		Serial.print(":");
+		Serial.print(Minute);
+		Serial.print(":");
+		Serial.println(Second);
+		Serial.print("Date from RTC: ");
+		Serial.print(Day);
+		Serial.print(".");
+		Serial.print(Month);
+		Serial.print(".");
+		Serial.println(Year);
+	#endif
+
 	// Event-Handler
 	action = event.check(Year, Month, Day, Hour, Minute, Second, Wday);
 	if(action and state == MODE_CLOCK){

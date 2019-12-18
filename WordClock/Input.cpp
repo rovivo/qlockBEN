@@ -8,15 +8,15 @@ Input::Input(short _pinBtnUp, short _pinBtnMode, short _pinBtnDown){
 }
 
 void Input::setup(){
-	pinMode(pin_Up, INPUT_PULLUP);
-	pinMode(pin_Mode, INPUT_PULLUP);
-	pinMode(pin_Down, INPUT_PULLUP);
+	pinMode(pin_Up, INPUT);
+	pinMode(pin_Mode, INPUT);
+	pinMode(pin_Down, INPUT);
 }
 
 void Input::call(){
-	actUp	= !digitalRead(pin_Up);
-	actMode	= !digitalRead(pin_Mode);
-	actDown	= !digitalRead(pin_Down);
+	actUp	= digitalRead(pin_Up);
+	actMode	= digitalRead(pin_Mode);
+	actDown	= digitalRead(pin_Down);
 	
 	fpUp	=  actUp   and !oldUp;
 	fpMode	=  actMode and !oldMode;

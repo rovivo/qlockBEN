@@ -363,7 +363,7 @@ void generateClockMatrix(PATTERN* matrix, unsigned short h, unsigned short m) {
 		default:mergeMatrix(matrix, &View_Hour12);break;
 	}
 	// Stunden-Korrektur 'Eins' -> 'Ein'
-	if(h%12 == 1 and m/5 == 0)	matrix->r[4] = matrix->r[4] & 0b11101111111;
+	if(h%12 == 1 and m/5 == 0)	matrix->r[5] = matrix->r[5] & 0b11101111111;
 }
 
 void writeNeo(PATTERN* matrix, Adafruit_NeoPixel* neo, RGB* color, bool writeFalse){
@@ -376,9 +376,9 @@ void writeNeo(PATTERN* matrix, Adafruit_NeoPixel* neo, RGB* color, bool writeFal
 			if(not(cor > 0 and (col == 0 or col == 12))){
 				int shift;
 				if(row%2 == 0)
-					shift = 12-col-cor;
+					shift = col-cor;	//shift = 12-col-cor;
 				else
-					shift = col-cor;
+					shift = 12-col-cor;	//shift = col-cor;
 				
 				if( (matrix->r[row] >> shift) & 1 )
 					neo->setPixelColor(px, neo->Color(color->r, color->g, color->b));
