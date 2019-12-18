@@ -4,12 +4,13 @@
 class Input
 {
 	public:
-		Input(short _pinBtnUp, short _pinBtnMode, short _pinBtnDown);
+		Input(short _pinBtnUp, short _pinBtnMode, short _pinBtnDown, int _pinLDR);
 		void setup();
 		void call();
 		bool clickUp(bool fn=false);
 		bool clickMode(bool fn=false);
 		bool clickDown(bool fn=false);
+		int actBrightness();
 		bool buttonUp();
 		bool buttonMode();
 		bool buttonDown();
@@ -19,10 +20,12 @@ class Input
 		short	pin_Up;
 		short	pin_Mode;
 		short	pin_Down;
+		int 	pin_LDR;
 		
 		bool	actUp;
 		bool	actMode;
 		bool	actDown;
+		int 	actLDR;
 		bool	oldUp;
 		bool	oldMode;
 		bool	oldDown;

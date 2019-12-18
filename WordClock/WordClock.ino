@@ -10,7 +10,7 @@
 #include "EventHandler.h"
 #include "FreeMemory.h"
 
-#define debug
+//#define debug
 
 #define PIN_DCF				9
 
@@ -44,8 +44,6 @@
 #define MODE_SCHWEIZ		11
 #define MODE_AUSTRIA		12
 #define MODE_DAILY			13
-#define MODE_NINA			14
-#define MODE_URS			15
 
 #define	MODE_SLEEP			20
 #define	MODE_WAKEUP			21
@@ -53,11 +51,11 @@
 
 Adafruit_NeoPixel	neo		= Adafruit_NeoPixel(PIXELS_MAX,  PIN_NEOPIXEL,  NEO_GRB + NEO_KHZ800);
 MyClock 			clk		= MyClock(PIN_DCF, PIN_RTC_ON, &neo);
-Input				inp		= Input(PIN_BTN_UP, PIN_BTN_MODE, PIN_BTN_DOWN);
+Input				inp		= Input(PIN_BTN_UP, PIN_BTN_MODE, PIN_BTN_DOWN, PIN_LDR);
 EventHandler		event	= EventHandler();
 
 
-ColorSequencer		seq		= ColorSequencer(1500);
+ColorSequencer		seq		= ColorSequencer(15);
 
 PATTERN 			matrix;
 
@@ -99,9 +97,6 @@ void setup(){
 	
 	event.add(	MODE_SCHWEIZ,	-1,		 8,		 1,		-1,		 0,		25,			-1		);
 	
-	//event.add(	MODE_NINA,		-1,		 6,		 5,		-1,		-1,		45,			-1		);
-	//event.add(	MODE_URS,		-1,		 7,		31,		-1,		-1,		45,			-1		);
-	
 	Serial.println("QlockKerstinRGB");
     Serial.print("compiled: ");
     Serial.print(__DATE__);
@@ -120,8 +115,8 @@ void loop(){
 	inp.call();	// Input handler
 
 	// Funktions-Klassen
-	seq.call();
-	
+	seq.call(inp.actBrightness());
+
 	// RTC-Infos bereitstellen
 	unsigned short Hour		= clk.getRtcHour();
 	unsigned short Minute	= clk.getRtcMinute();
@@ -130,7 +125,7 @@ void loop(){
 	unsigned short Month	= clk.getRtcMonth();
 	unsigned short Day		= clk.getRtcDay();
 	unsigned short Wday		= clk.getRtcWday();
-	
+
 	#ifdef debug
 		Serial.print("Time from RTC: ");
 		Serial.print(Hour);
@@ -144,6 +139,8 @@ void loop(){
 		Serial.print(Month);
 		Serial.print(".");
 		Serial.println(Year);
+		Serial.print("LDR: ");
+		Serial.println(inp.actBrightness());
 	#endif
 
 	// Event-Handler
@@ -326,32 +323,6 @@ void loop(){
 			writeNeo(&matrix, &neo, &colorOff, true);
 			if(action == MODE_WAKEUP)
 				state = MODE_CLOCK;
-			break;
-		}
-		case MODE_NINA:{
-			if(tmrToclock.ton(true,5000)){
-				tmrToclock.ton(false);
-				state = MODE_CLOCK;
-			}
-			clearMatrix(&matrix);
-			writeMatrix(&matrix, 'N', 5, 6);
-			writeMatrix(&matrix, 'I', 5, 3);
-			writeMatrix(&matrix, 'N', 0, 5);
-			writeMatrix(&matrix, 'A', 0, 0);
-			writeNeo(&matrix, &neo, &seq.actualColor, true);
-			break;
-		}
-		case MODE_URS:{
-			if(tmrToclock.ton(true,5000)){
-				tmrToclock.ton(false);
-				state = MODE_CLOCK;
-			}
-			clearMatrix(&matrix);
-			writeMatrix(&matrix, 'U', 2, 8);
-			writeMatrix(&matrix, 'R', 2, 4);
-			writeMatrix(&matrix, 'S', 2, 0);
-			writeNeo(&matrix, &neo, &seq.actualColor, true);
-			
 			break;
 		}
 		case MODE_DAILY:{

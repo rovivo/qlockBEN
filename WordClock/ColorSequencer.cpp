@@ -7,12 +7,12 @@ ColorSequencer::ColorSequencer(unsigned long speed, unsigned short maxBrightness
 	minBrightSum	= minBrightnessSum; 
 }
 
-void ColorSequencer::call(bool init) {
+void ColorSequencer::call(int ldr, bool init) {
 	if(init){
 		getNew();
-		actualColor.r	=	showColor.r;
-		actualColor.g	=	showColor.g;
-		actualColor.b	=	showColor.b;
+		calcColor.r	= actualColor.r	= showColor.r;
+		calcColor.g = actualColor.g	= showColor.g;
+		calcColor.b = actualColor.b	= showColor.b;	
 	}
 	else{
 		if(tick.ton(true, tickSpeed)){
@@ -35,6 +35,18 @@ void ColorSequencer::call(bool init) {
 			if(actualColor.r == showColor.r && actualColor.g == showColor.g && actualColor.b == showColor.b) {
 				getNew();
 			}
+
+		ldrCalc = ((ldr / 1024-1 ) * -1);
+		calcColor.r	= ((int)actualColor.r * ldrCalc);
+		calcColor.g = ((int)actualColor.g * ldrCalc);
+		calcColor.b = ((int)actualColor.b * ldrCalc);
+
+		Serial.print("Red: ");
+		Serial.print(calcColor.r);
+		Serial.print("  Green: ");
+		Serial.print(calcColor.g);
+		Serial.print("  Blue: ");
+		Serial.println(calcColor.b);
 		}
 	}
 }
