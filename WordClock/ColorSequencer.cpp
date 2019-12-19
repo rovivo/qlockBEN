@@ -35,20 +35,20 @@ void ColorSequencer::call(int ldr, bool init) {
 			if(actualColor.r == showColor.r && actualColor.g == showColor.g && actualColor.b == showColor.b) {
 				getNew();
 			}
-
-		ldrCalc = ((ldr / 1024-1 ) * -1);
-		calcColor.r	= ((int)actualColor.r * ldrCalc);
-		calcColor.g = ((int)actualColor.g * ldrCalc);
-		calcColor.b = ((int)actualColor.b * ldrCalc);
-
-		Serial.print("Red: ");
-		Serial.print(calcColor.r);
-		Serial.print("  Green: ");
-		Serial.print(calcColor.g);
-		Serial.print("  Blue: ");
-		Serial.println(calcColor.b);
 		}
 	}
+
+    ldrCalc = ((ldr / 1024-1 ) * -1);
+    calcColor.r = (byte)( (float)(actualColor.r * ldrCalc));
+    calcColor.g = (byte)( (float)(actualColor.g * ldrCalc));
+    calcColor.b = (byte)( (float)(actualColor.b * ldrCalc));
+
+    Serial.print("Red: ");
+    Serial.print(calcColor.r);
+    Serial.print("  Green: ");
+    Serial.print(calcColor.g);
+    Serial.print("  Blue: ");
+    Serial.println(calcColor.b);
 }
 
 void ColorSequencer::getNew(){

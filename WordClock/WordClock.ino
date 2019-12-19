@@ -456,7 +456,7 @@ void loop(){
 			writeMatrix(&matrix,   temp/10, 0, 6);
 			writeMatrix(&matrix,   temp%10, 0, 2);
 			writeMatrix(&matrix, '\'',0, 0);
-			writeNeo(&matrix, &neo, &seq.actualColor);
+			writeNeo(&matrix, &neo, &seq.calcColor);
 			break;
 		}
 		case MODE_DCFDIAG:{
@@ -475,7 +475,7 @@ void loop(){
 				state = MODE_TEMP;
 			}
 			generateClockMatrix(&matrix, Hour, Minute);
-			writeNeo(&matrix, &neo, &seq.actualColor, true);
+			writeNeo(&matrix, &neo, &seq.calcColor, true);
 			break;
 		}
 		default:{
