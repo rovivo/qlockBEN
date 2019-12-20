@@ -1,3 +1,5 @@
+//#define DCFDebug
+
 #include "MyClock.h"
 
 MyClock::MyClock(short _pinDCF, short _pinRTCEnable, Adafruit_NeoPixel* _neo){
@@ -68,15 +70,19 @@ void MyClock::call(){
 		//	Serial.println(timeFalse);
 		if(timeFalse < 450){				// Pause was too short
 			bitstream_invalid = true;
-			Serial.print(F(" ! Sig- too short: "));
-			Serial.println(timeFalse);
+			#ifdef DCFDebug
+				Serial.print(F(" ! Sig- too short: "));
+				Serial.println(timeFalse);
+			#endif
 		}
 		else if(timeFalse > 800)
 			stream_end();
 		else if(timeFalse > 1600){ 		// Pause was too long
 			bitstream_invalid = true;
-			Serial.print(F(" ! Sig- too long: "));
-			Serial.println(timeFalse);
+			#ifdef DCFDebug
+				Serial.print(F(" ! Sig- too long: "));
+				Serial.println(timeFalse);
+			#endif
 		}
 	}
 	if(sigNeg){
@@ -87,8 +93,10 @@ void MyClock::call(){
 		if(timeTrue < 50){
 			bitstream_invalid = true;
 			stream_add(0);
-			Serial.print(F(" ! Sig+ too short: "));
-			Serial.println(timeTrue);
+			#ifdef DCFDebug
+				Serial.print(F(" ! Sig+ too short: "));
+				Serial.println(timeTrue);
+			#endif
 		}
 		else if(timeTrue < 95){
 			stream_add(0);
@@ -96,8 +104,10 @@ void MyClock::call(){
 		else if(timeTrue < 105){
 			bitstream_invalid = true;
 			stream_add(1);
-			Serial.print(F(" ! Sig undef.: "));
-			Serial.println(timeTrue);
+			#ifdef DCFDebug
+				Serial.print(F(" ! Sig undef.: "));
+				Serial.println(timeTrue);
+			#endif
 		}
 		else if(timeTrue < 150){
 			stream_add(1);
@@ -105,8 +115,10 @@ void MyClock::call(){
 		else{
 			bitstream_invalid = true;
 			stream_add(0);
-			Serial.print(F(" ! Sig+ too long: "));
-			Serial.println(timeTrue);
+			#ifdef DCFDebug
+				Serial.print(F(" ! Sig+ too long: "));
+				Serial.println(timeTrue);
+			#endif
 		}
 	}
 	
@@ -151,8 +163,9 @@ void MyClock::stream_end(){
 	if(!bitstream_invalid)
 		stream_check();
 	else
-		Serial.println(F("Stream invalid"));
-
+		#ifdef DCFDebug
+			Serial.println(F("Stream invalid"));
+		#endif
 	bitstream_invalid = false;
 	bitstream_idx = 0;
 	for(int i=0; i<MYCLOCK_STREAMLEN; i++)

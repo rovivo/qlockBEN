@@ -10,7 +10,11 @@
 #include "EventHandler.h"
 #include "FreeMemory.h"
 
+// ---------- debugs ------------
 //#define debug
+// DCFDebug in MyClock
+// ldrDebug in ColorSequencer
+
 
 #define PIN_DCF				9
 
