@@ -59,7 +59,7 @@ Input				inp		= Input(PIN_BTN_UP, PIN_BTN_MODE, PIN_BTN_DOWN, PIN_LDR);
 EventHandler		event	= EventHandler();
 
 
-ColorSequencer		seq		= ColorSequencer(15);
+ColorSequencer		seq		= ColorSequencer(50);
 
 PATTERN 			matrix;
 
