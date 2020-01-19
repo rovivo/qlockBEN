@@ -12,6 +12,7 @@ class ColorSequencer
 		void call(int ldr=512, bool init=false);
 		void getNew();
 		float ldrCalc = 0.5;
+		uint32_t ColorWheel(uint8_t WheelPos);
 		RGB actualColor = {50,50,50};
 		RGB calcColor	= {50,50,50};
 
@@ -20,6 +21,7 @@ class ColorSequencer
 		unsigned short	maxBright;
 		int				minBrightSum;
 		float 			ldrStep;
+		uint8_t         rgbWheelPos;
 		RGB showColor = {50,50,50};
 		Timer tick;
 

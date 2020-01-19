@@ -46,8 +46,9 @@
 
 #define MODE_INUBIA			10
 #define MODE_SCHWEIZ		11
-#define MODE_AUSTRIA		12
-#define MODE_DAILY			13
+#define MODE_BEN			12
+#define MODE_AUSTRIA		13
+#define MODE_DAILY			14
 
 #define	MODE_SLEEP			20
 #define	MODE_WAKEUP			21
@@ -380,6 +381,85 @@ void loop(){
 			writeNeo(&View_SchweizWhite, &neo, &white);
 			break;
 		}
+
+		case MODE_BEN:{
+			if(tmrToclock.ton(true,10000)){
+				tmrToclock.ton(false);
+				state = MODE_CLOCK;
+			}
+			const RGB white = {50,50,50};
+			const RGB red = {50,0,0};
+			const struct PATTERN 	View_Ben1 =  {
+				0b0000000000000, 
+				 0b00000000000,
+				 0b00000000000,
+				 0b00000000000,
+				 0b00000000000,
+				 0b00001110000,
+				 0b00000000000,
+				 0b00000000000,
+				 0b00000000000,
+				0b0000000000000};
+			const struct PATTERN 	View_Ben2 =  {
+				0b0000000000000,
+				 0b00111011100,
+				 0b01000100010,
+				 0b01000000010,
+				 0b01000000010,
+				 0b00101110100,
+				 0b00010001000,
+				 0b00001010000,
+				 0b00000100000,
+				0b0000000000000};
+			const struct PATTERN 	View_Ben3 =  {
+				0b0001110111000,
+				 0b01000100010,
+				 0b10000100001,
+				 0b10000000001,
+				 0b10000000001,
+				 0b01001110010,
+				 0b00100000100,
+				 0b00010001000,
+				 0b00001010000,
+				0b0000001000000};
+			const struct PATTERN 	View_Ben4 =  {
+				0b0001110111000,
+				 0b01111111110,
+				 0b11000100011,
+				 0b11000000011,
+				 0b11000000011,
+				 0b01101110110,
+				 0b00110001100,
+				 0b00011011000,
+				 0b00001110000,
+				0b0000001000000};
+			const struct PATTERN 	View_Ben5 =  {
+				0b0001110111000,
+				 0b01111111110,
+				 0b11111111111,
+				 0b11100100111,
+				 0b11100000111,
+				 0b01111111110,
+				 0b00111011100,
+				 0b00011111000,
+				 0b00001110000,
+				0b0000001000000};
+			const struct PATTERN 	View_Ben6 =  {
+				0b0001110111000,
+				 0b01111111110,
+				 0b11111111111,
+				 0b11111111111,
+				 0b11111111111,
+				 0b01111111110,
+				 0b00111111100,
+				 0b00011111000,
+				 0b00001110000,
+				0b0000001000000};
+			writeNeo(&View_Ben1, &neo, &red);
+			writeNeo(&View_Ben2, &neo, &white);
+			break;
+		}
+
 		case MODE_AUSTRIA:{
 			if(tmrToclock.ton(true,10000)){
 				tmrToclock.ton(false);

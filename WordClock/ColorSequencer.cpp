@@ -67,9 +67,25 @@ void ColorSequencer::call(int ldr, bool init) {
 }
 
 void ColorSequencer::getNew(){
-    do{
-        showColor.r		= random(maxBright);
-        showColor.g		= random(maxBright);
-        showColor.b		= random(maxBright);
-    }while( (showColor.r + showColor.g + showColor.b) < minBrightSum);
+rgbWheelPos++;
+    if(rgbWheelPos >= 360)
+        rgbWheelPos = 0;
+    
+    if(rgbWheelPos < 85){
+        showColor.r = rgbWheelPos * 3;
+        showColor.g = 255 - rgbWheelPos * 3;
+        showColor.b = 0;
+    }
+    else if(rgbWheelPos < 170){
+        
+        showColor.b = rgbWheelPos * 3;
+        showColor.r = 255 - rgbWheelPos * 3;
+        showColor.g = 0;
+    }
+    else{
+        
+        showColor.g = rgbWheelPos * 3;
+        showColor.b = 255 - rgbWheelPos * 3;
+        showColor.r = 0;
+    }
 }
