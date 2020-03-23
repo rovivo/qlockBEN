@@ -18,8 +18,8 @@
 
 #define PIN_DCF				9
 
-#define PIN_RTC_D			A4	// SDA
-#define PIN_RTC_C			A5	// SCL
+#define PIN_RTC_D			2	// SDA
+#define PIN_RTC_C			3	// SCL
 #define PIN_RTC_ON			4
 
 #define PIN_BTN_UP			5
